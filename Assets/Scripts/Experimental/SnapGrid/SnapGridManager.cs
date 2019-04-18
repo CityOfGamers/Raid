@@ -19,7 +19,15 @@ public class SnapGridManager
 
     private static void OnSceneGuiDelegate(SceneView sceneview)
     {
-        if (Event.current.isKey && Event.current.keyCode == KeyCode.G && !Event.current.control && !Event.current.alt)
+        // If no grid set, default to one from scene
+        if (snapGridRef == null)
+        {
+            var grids = GameObject.FindObjectsOfType<SnapGrid>();
+            if (grids.Length > 0)
+                snapGridRef = grids[0].transform;
+        }
+
+        if (Event.current.isKey && Event.current.keyCode == KeyCode.G)
         {
             var newButtonDown = Event.current.type == EventType.KeyDown;
             if (newButtonDown != gridButtonDown)
@@ -29,15 +37,6 @@ public class SnapGridManager
             Event.current.Use();
         }
          
-        
-//        // If no grid set, default to one from scene
-//        if (snapGridRef == null)
-//        {
-//            var grids = GameObject.FindObjectsOfType<SnapGrid>();
-//            if (grids.Length > 0)
-//                snapGridRef = grids[0].transform;
-//        }
-        
         // Test for grid tool start
         if (!toolActive && gridButtonDown)
         {
