@@ -52,6 +52,9 @@ public class CCGui : MonoBehaviour
         masks = new List<Button>(mkTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
         pants = new List<Button>(ptTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
         shoes = new List<Button>(shTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
+        cc.gui = this;
+        cc.Setup();
+        gameObject.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()

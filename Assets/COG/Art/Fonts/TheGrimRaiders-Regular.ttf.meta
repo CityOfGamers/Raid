@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: fe73a48be0a7a0d499c4812923856942
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: The Grim Raiders
+  fontNames:
+  - The Grim Raiders
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: fc7c97ece39f0624ca15ca87c6d7b337, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

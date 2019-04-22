@@ -42,7 +42,7 @@ public class CharacterCustomizer : MonoBehaviour
     public Slot shownShoe;
     #endregion
 
-    CCGui gui;
+   public CCGui gui;
     bool MustHaveSlotEquipped(EquipLocation location)
     {
         switch (location)
@@ -97,12 +97,8 @@ public class CharacterCustomizer : MonoBehaviour
     }
     // Start is called before the first frame update
     void Start()
-    {
-        gui = FindObjectOfType<CCGui>();
-        SortGear();
-        DefaultGear();
-        LoadGear();
-        gui.ResetGui();
+    {        
+        
     }
 
     // Update is called once per frame
@@ -111,6 +107,13 @@ public class CharacterCustomizer : MonoBehaviour
 
     }
 
+    public void Setup()
+    {
+        SortGear();
+        DefaultGear();
+        LoadGear();
+        gui.ResetGui();
+    }
 
     void SortGear()
     {
