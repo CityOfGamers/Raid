@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class MainMenu : MonoBehaviour 
 {
@@ -25,11 +26,12 @@ public class MainMenu : MonoBehaviour
     public JoinMenu joinMenu;
     public OptionsMenu optionMenu;
 
+    public EventTrigger[] buttonTriggers; 
     // Currently active submenu, used by menu backdrop to track what is going on
     public int activeSubmenuNumber;
 
     CanvasGroup m_CanvasGroup;
-
+    public bool faded;
     public void SetPanelActive(ClientFrontend.MenuShowing menuShowing)
     {
         var active = menuShowing != ClientFrontend.MenuShowing.None;
@@ -89,8 +91,67 @@ public class MainMenu : MonoBehaviour
         m_CanvasGroup.alpha = v;
     }
 
-    // Called from the Menu/Button_* UI.Buttons
+    public void FadeMainMenu(bool fade)
+    {        
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+        if (fade&&!faded)
+        {
+            m_CanvasGroup.DOFade(0,1f);
+            m_CanvasGroup.interactable = false;
+            ToggleButtonEventTriggers(false);
+        }
+        else
+        {
+            m_CanvasGroup.DOFade(1, 1f);
+            m_CanvasGroup.interactable = true;
+            ToggleButtonEventTriggers(true);
+        }
+        faded = !faded;
+    }
+
+    public void ToggleButtonEventTriggers(bool toggle)
+    {
+        for (int i = 0; i < buttonTriggers.Length; i++)
+        {
+            buttonTriggers[i].enabled = toggle;
+        }
+    }
     public void ShowSubMenu(GameObject ShowMenu)
+    {
+        activeSubmenuNumber = 0;
+        for (int i = 0; i < uiBinding.menus.Length; i++)
+        {
+            var menu = uiBinding.menus[i];
+            if (menu == ShowMenu)
+            {
+                menu.SetActive(true);
+                activeSubmenuNumber = i;
+            }
+            else if (menu.activeSelf)
+                menu.SetActive(false);
+        }
+        if (activeSubmenuNumber == 6)
+        {
+            ClientFrontend frontend = FindObjectOfType<ClientFrontend>();
+            if (frontend.menuShowing != ClientFrontend.MenuShowing.Raider)
+            {
+                frontend.ShowMenu(ClientFrontend.MenuShowing.Raider);
+                Debug.Log("Showing Raider");
+                CCGui.FadeCCGUI(false);
+                // FadeMainMenu(true);
+            }
+        }
+        if (activeSubmenuNumber == 0)
+        {
+            CCGui.FadeCCGUI(true);
+            // FadeMainMenu(false);
+        }
+    }
+    // Called from the Menu/Button_* UI.Buttons
+    public void ShowSubMenu(GameObject ShowMenu,bool fademenu = false)
     {
         activeSubmenuNumber = 0;
         for(int i = 0; i < uiBinding.menus.Length; i++)
@@ -103,6 +164,26 @@ public class MainMenu : MonoBehaviour
             }
             else if (menu.activeSelf)
                 menu.SetActive(false);
+        }
+        if (activeSubmenuNumber == 6)
+        {
+            ClientFrontend frontend = FindObjectOfType<ClientFrontend>();
+            if (frontend.menuShowing != ClientFrontend.MenuShowing.Raider)
+            {
+                frontend.ShowMenu(ClientFrontend.MenuShowing.Raider);
+                Debug.Log("Showing Raider");
+                CCGui.FadeCCGUI(false);
+               // FadeMainMenu(true);
+            }
+        }
+        if (activeSubmenuNumber == 0)
+        {
+            CCGui.FadeCCGUI(true);
+            // FadeMainMenu(false);
+            if (fademenu)
+            {
+                FadeMainMenu(false);
+            }
         }
     }
 
@@ -179,4 +260,9 @@ public class MainMenu : MonoBehaviour
     static readonly string k_AutoBuildPath = "AutoBuild";
     static readonly string k_AutoBuildExe = "AutoBuild.exe";
 
+    private void OnDisable()
+    {
+        faded = false;
+        ToggleButtonEventTriggers(true);
+    }
 }

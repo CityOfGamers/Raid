@@ -42,7 +42,7 @@ public class CharacterCustomizer : MonoBehaviour
     public Slot shownShoe;
     #endregion
 
-   public CCGui gui;
+ 
     bool MustHaveSlotEquipped(EquipLocation location)
     {
         switch (location)
@@ -112,7 +112,7 @@ public class CharacterCustomizer : MonoBehaviour
         SortGear();
         DefaultGear();
         LoadGear();
-        gui.ResetGui();
+        CCGui.instance.ResetGui();
     }
 
     void SortGear()
@@ -125,7 +125,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Backpack:
                     backpacks.Add(item);
                     item.index = backpacks.IndexOf(item);
-                    foreach (var button in gui.backpacks)
+                    foreach (var button in CCGui.instance.backpacks)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -136,7 +136,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Belt:
                     belts.Add(item);
                     item.index = belts.IndexOf(item);
-                    foreach (var button in gui.belts)
+                    foreach (var button in CCGui.instance.belts)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -147,7 +147,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Body:
                     bodies.Add(item);
                     item.index = bodies.IndexOf(item);
-                    foreach (var button in gui.bodies)
+                    foreach (var button in CCGui.instance.bodies)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -158,7 +158,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Glasses:
                     glasses.Add(item);
                     item.index = glasses.IndexOf(item);
-                    foreach (var button in gui.glasses)
+                    foreach (var button in CCGui.instance.glasses)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -169,7 +169,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Hat:
                     hats.Add(item);
                     item.index = hats.IndexOf(item);
-                    foreach (var button in gui.hats)
+                    foreach (var button in CCGui.instance.hats)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -180,7 +180,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Head:
                     heads.Add(item);
                     item.index = heads.IndexOf(item);
-                    foreach (var button in gui.heads)
+                    foreach (var button in CCGui.instance.heads)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -191,7 +191,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Mask:
                     masks.Add(item);
                     item.index = masks.IndexOf(item);
-                    foreach (var button in gui.masks)
+                    foreach (var button in CCGui.instance.masks)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -202,7 +202,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Pants:
                     pants.Add(item);
                     item.index = pants.IndexOf(item);
-                    foreach (var button in gui.pants)
+                    foreach (var button in CCGui.instance.pants)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -213,7 +213,7 @@ public class CharacterCustomizer : MonoBehaviour
                 case EquipLocation.Shoes:
                     shoes.Add(item);
                     item.index = shoes.IndexOf(item);
-                    foreach (var button in gui.shoes)
+                    foreach (var button in CCGui.instance.shoes)
                     {
                         if (button.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite == item.gearImage)
                         {
@@ -999,7 +999,7 @@ public class CharacterCustomizer : MonoBehaviour
 
         if (currBelt == null)
         {
-            CCGui.ToggleSVG(gui.belts[0], true);
+            CCGui.ToggleSVG(CCGui.instance.belts[0], true);
             foreach (var item in belts)
             {
                     CCGui.ToggleSVG(item.myButton, false);
@@ -1011,7 +1011,7 @@ public class CharacterCustomizer : MonoBehaviour
             {
                 if (currBelt == item)
                 {
-                    CCGui.ToggleSVG(gui.belts[0], false);
+                    CCGui.ToggleSVG(CCGui.instance.belts[0], false);
                     CCGui.ToggleSVG(item.myButton, true);
                 }
                 else
@@ -1023,7 +1023,7 @@ public class CharacterCustomizer : MonoBehaviour
         }
         if (currBack == null)
         {
-            CCGui.ToggleSVG(gui.backpacks[0], true);
+            CCGui.ToggleSVG(CCGui.instance.backpacks[0], true);
             foreach (var item in backpacks)
             {
                 CCGui.ToggleSVG(item.myButton, false);
@@ -1035,7 +1035,7 @@ public class CharacterCustomizer : MonoBehaviour
             {
                 if (currBack == item)
                 {
-                    CCGui.ToggleSVG(gui.backpacks[0], false);
+                    CCGui.ToggleSVG(CCGui.instance.backpacks[0], false);
                     CCGui.ToggleSVG(item.myButton, true);
                 }
                 else
@@ -1049,7 +1049,7 @@ public class CharacterCustomizer : MonoBehaviour
         {
             foreach (var item in glasses)
             {
-                CCGui.ToggleSVG(gui.glasses[0], true);
+                CCGui.ToggleSVG(CCGui.instance.glasses[0], true);
                 CCGui.ToggleSVG(item.myButton, false);
             }
         }
@@ -1060,7 +1060,7 @@ public class CharacterCustomizer : MonoBehaviour
 
                 if (currGlass == item)
                 {
-                    CCGui.ToggleSVG(gui.glasses[0], false);
+                    CCGui.ToggleSVG(CCGui.instance.glasses[0], false);
                     CCGui.ToggleSVG(item.myButton, true);
                 }
                 else
@@ -1072,7 +1072,7 @@ public class CharacterCustomizer : MonoBehaviour
         }
         if (currHat == null)
         {
-            CCGui.ToggleSVG(gui.hats[0], true);
+            CCGui.ToggleSVG(CCGui.instance.hats[0], true);
             foreach (var item in hats)
             {
                 CCGui.ToggleSVG(item.myButton, false);
@@ -1085,7 +1085,7 @@ public class CharacterCustomizer : MonoBehaviour
 
                 if (currHat == item)
                 {
-                    CCGui.ToggleSVG(gui.hats[0], false);
+                    CCGui.ToggleSVG(CCGui.instance.hats[0], false);
                     CCGui.ToggleSVG(item.myButton, true);
                 }
                 else
@@ -1097,7 +1097,7 @@ public class CharacterCustomizer : MonoBehaviour
         }
         if (currMask == null)
         {
-            CCGui.ToggleSVG(gui.masks[0], true);
+            CCGui.ToggleSVG(CCGui.instance.masks[0], true);
             foreach (var item in masks)
             {
                 CCGui.ToggleSVG(item.myButton, false);
@@ -1110,7 +1110,7 @@ public class CharacterCustomizer : MonoBehaviour
 
                 if (currMask == item)
                 {
-                    CCGui.ToggleSVG(gui.masks[0], false);
+                    CCGui.ToggleSVG(CCGui.instance.masks[0], false);
                     CCGui.ToggleSVG(item.myButton, true);
                 }
                 else

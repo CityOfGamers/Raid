@@ -622,7 +622,7 @@ public class Game : MonoBehaviour
         if (m_SoundSystem != null)
             m_SoundSystem.Update();
 
-        if (clientFrontend != null)
+        if (clientFrontend != null && clientFrontend.menuShowing!=ClientFrontend.MenuShowing.Raider)
             clientFrontend.UpdateGame();
 
         Console.ConsoleUpdate();

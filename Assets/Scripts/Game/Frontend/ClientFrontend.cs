@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
 
 public class ClientFrontend : MonoBehaviour
@@ -12,6 +10,7 @@ public class ClientFrontend : MonoBehaviour
     public ServerPanel serverPanel;
 
     public bool m_ShowScorePanel;
+    public static ClientFrontend instance;
 
     [SerializeField] SoundDef uiHighlightSound;
     [SerializeField] SoundDef uiSelectSound;
@@ -26,12 +25,13 @@ public class ClientFrontend : MonoBehaviour
     {
         None,
         Main,
-        Ingame
+        Ingame,
+        Raider
     }
 
     Interpolator m_MenuFader = new Interpolator(0.0f, Interpolator.CurveType.SmoothStep);
 
-    public MenuShowing menuShowing { get; private set; } = MenuShowing.None;
+    public MenuShowing menuShowing = MenuShowing.None;
 
     public int ActiveMainMenuNumber
     {
@@ -44,8 +44,31 @@ public class ClientFrontend : MonoBehaviour
     public void OnSelect() { Game.SoundSystem.Play(uiSelectSound); }
     public void OnClose() { Game.SoundSystem.Play(uiCloseSound); }
 
+    public static void OnSelectStatic()
+    {
+        instance.OnSelect();
+    }
+    public static void OnHightlightStatic()
+    {
+        instance.OnHighlight();
+    }
+    public static void FadeInMenu()
+    {
+        instance.ShowMenu(MenuShowing.Main);
+    }
     void Awake()
     {
+        if (instance == null)
+
+            //if not, set instance to this
+            instance = this;
+
+        //If instance already exists and it's not this:
+        else if (instance != this)
+
+            //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance.
+            Destroy(gameObject);
+
         m_ScoreboardPanelCanvas = scoreboardPanel.GetComponent<Canvas>();
         m_GameScorePanelCanvas = gameScorePanel.GetComponent<Canvas>();
         m_ChatPanelCanvas = chatPanel.GetComponent<Canvas>();
@@ -64,14 +87,44 @@ public class ClientFrontend : MonoBehaviour
 
     public void ShowMenu(MenuShowing show, float fadeTime = 0.0f)
     {
+
         if (menuShowing == show)
             return;
+        if (show == MenuShowing.Main && menuShowing == MenuShowing.Raider)
+        {
+            mainMenu.ShowSubMenu(mainMenu.uiBinding.menus[0],true);
+        }
         menuShowing = show;
-        m_MenuFader.MoveTo(show != MenuShowing.None ? 1.0f : 0.0f, fadeTime);
+        m_MenuFader.MoveTo((show != MenuShowing.None || show != MenuShowing.Raider) ? 1.0f : 0.0f, fadeTime);
         if (menuShowing != MenuShowing.None)
             Game.SoundSystem.Play(uiSelectLightSound);
         else
             Game.SoundSystem.Play(uiCloseSound);
+
+        //FadeMenu
+        //if (mainMenu != null)
+        //{
+        //    if (!mainMenu.faded)
+        //    {
+        //        switch (show)
+        //        {
+        //            case MenuShowing.None:
+        //                mainMenu.FadeMainMenu(true);
+        //                break;
+        //            case MenuShowing.Main:
+        //                mainMenu.FadeMainMenu(false);
+        //                break;
+        //            case MenuShowing.Ingame:
+        //                mainMenu.FadeMainMenu(false);
+        //                break;
+        //            case MenuShowing.Raider:
+        //                mainMenu.FadeMainMenu(true);
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //}
     }
 
     public void UpdateGame()
@@ -88,7 +141,7 @@ public class ClientFrontend : MonoBehaviour
         }
 
         // Toggle menu if not in editor
-        if(!Application.isEditor && Input.GetKeyUp(KeyCode.Escape))
+        if (!Application.isEditor && Input.GetKeyUp(KeyCode.Escape))
         {
             if (menuShowing == MenuShowing.None)
             {
@@ -106,13 +159,21 @@ public class ClientFrontend : MonoBehaviour
             }
         }
 
-        // Fade main menu
-        var fade = m_MenuFader.GetValue();
-        var active = fade > 0.0f;
-        if (mainMenu.GetPanelActive() != active)
-            mainMenu.SetPanelActive(menuShowing);
-        if (active)
-            mainMenu.SetAlpha(fade);
+        if (mainMenu != null)
+        {
+            if (!mainMenu.faded)
+            {   // Fade main menu
+                var fade = m_MenuFader.GetValue();
+                var active = fade > 0.0f;
+                if (mainMenu.GetPanelActive() != active)
+                {
+                    mainMenu.SetPanelActive(menuShowing);
+                    Debug.Log("Set " + menuShowing.ToString() + " panel active");
+                }
+                if (active)
+                    mainMenu.SetAlpha(fade);
+            }
+        }
     }
 
     public void UpdateChat(ChatSystemClient chatSystem)

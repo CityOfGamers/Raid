@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,10 +7,11 @@ using UnityEngine.UI;
 
 public class CCGui : MonoBehaviour
 {
-    CharacterCustomizer cc;
+
     CharacterCustomizer.EquipLocation currTab;
     public Slot currSlot;
 
+    public static CCGui instance;
     #region MyRegion
 
     public ScrollRect bpTab;
@@ -38,11 +40,24 @@ public class CCGui : MonoBehaviour
     public Button equipButton;
     public Button deEquipButton;
 
+    CanvasGroup m_CanvasGroup;
+    public bool faded;
 
-
+    public GameObject raiderObj;
     private void Awake()
     {
-        cc = FindObjectOfType<CharacterCustomizer>();
+        if (instance == null)
+
+            //if not, set instance to this
+            instance = this;
+
+        //If instance already exists and it's not this:
+        else if (instance != this)
+
+            //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance.
+            Destroy(gameObject);
+
+        m_CanvasGroup = GetComponent<CanvasGroup>();
         backpacks = new List<Button>(bpTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
         belts = new List<Button>(btTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
         bodies = new List<Button>(byTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
@@ -52,9 +67,8 @@ public class CCGui : MonoBehaviour
         masks = new List<Button>(mkTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
         pants = new List<Button>(ptTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
         shoes = new List<Button>(shTab.transform.GetChild(0).GetChild(0).GetComponentsInChildren<Button>());
-        cc.gui = this;
-        cc.Setup();
-        gameObject.SetActive(false);
+        CharacterCustomizer.instance.Setup();
+        TurnOffGUI();
     }
     // Start is called before the first frame update
     void Start()
@@ -176,7 +190,7 @@ public class CCGui : MonoBehaviour
             default:
                 break;
         }
-        cc.CheckEquippedIcons();
+        CharacterCustomizer.instance.CheckEquippedIcons();
     }
 
     public void ShowTab(CharacterCustomizer.EquipLocation location)
@@ -285,25 +299,26 @@ public class CCGui : MonoBehaviour
             default:
                 break;
         }
-        cc.ResetGear();
-        cc.CheckEquippedIcons();
+        CharacterCustomizer.instance.ResetGear();
+        CharacterCustomizer.instance.CheckEquippedIcons();
 
     }
     public void ResetGui() //Set Menu to Default Tab
     {
+        SetCCButtons();
         ShowTab((int)CharacterCustomizer.EquipLocation.Body);
     }
 
     public void SetCCButtons() //Determines which gear buttons to display
     {
-        if (currSlot!=null)
+        if (currSlot != null)
         {
             if (currSlot.unlocked)
             {
                 switch (currTab)
                 {
                     case CharacterCustomizer.EquipLocation.Backpack:
-                        if (currSlot == cc.currBack)
+                        if (currSlot == CharacterCustomizer.instance.currBack)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -319,7 +334,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Belt:
-                        if (currSlot == cc.currBelt)
+                        if (currSlot == CharacterCustomizer.instance.currBelt)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -335,7 +350,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Body:
-                        if (currSlot == cc.currBody)
+                        if (currSlot == CharacterCustomizer.instance.currBody)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -351,7 +366,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Glasses:
-                        if (currSlot == cc.currGlass)
+                        if (currSlot == CharacterCustomizer.instance.currGlass)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -367,7 +382,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Hat:
-                        if (currSlot == cc.currHat)
+                        if (currSlot == CharacterCustomizer.instance.currHat)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -383,7 +398,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Head:
-                        if (currSlot == cc.currHead)
+                        if (currSlot == CharacterCustomizer.instance.currHead)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -399,7 +414,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Mask:
-                        if (currSlot == cc.currMask)
+                        if (currSlot == CharacterCustomizer.instance.currMask)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -415,7 +430,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Pants:
-                        if (currSlot == cc.currPants)
+                        if (currSlot == CharacterCustomizer.instance.currPants)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -431,7 +446,7 @@ public class CCGui : MonoBehaviour
                         }
                         break;
                     case CharacterCustomizer.EquipLocation.Shoes:
-                        if (currSlot == cc.currShoe)
+                        if (currSlot == CharacterCustomizer.instance.currShoe)
                         {
                             tryButton.gameObject.SetActive(false);
                             buyButton.gameObject.SetActive(false);
@@ -470,114 +485,114 @@ public class CCGui : MonoBehaviour
 
     public void Try()
     {
-        if (currSlot!=null)
+        if (currSlot != null)
         {
             switch (currSlot.slotLocation)
-        {
-            case CharacterCustomizer.EquipLocation.Backpack:
-                cc.ShowBack(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Belt:
-                cc.ShowBelt(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Body:
-                cc.ShowBody(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Glasses:
-                cc.ShowGlasses(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Hat:
-                cc.ShowHat(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Head:
-                cc.ShowHead(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Mask:
-                cc.ShowMask(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Pants:
-                cc.ShowPants(currSlot.index);
-                break;
-            case CharacterCustomizer.EquipLocation.Shoes:
-                cc.ShowShoes(currSlot.index);
-                break;
-            default:
-                break;
-        }
+            {
+                case CharacterCustomizer.EquipLocation.Backpack:
+                    CharacterCustomizer.instance.ShowBack(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Belt:
+                    CharacterCustomizer.instance.ShowBelt(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Body:
+                    CharacterCustomizer.instance.ShowBody(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Glasses:
+                    CharacterCustomizer.instance.ShowGlasses(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Hat:
+                    CharacterCustomizer.instance.ShowHat(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Head:
+                    CharacterCustomizer.instance.ShowHead(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Mask:
+                    CharacterCustomizer.instance.ShowMask(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Pants:
+                    CharacterCustomizer.instance.ShowPants(currSlot.index);
+                    break;
+                case CharacterCustomizer.EquipLocation.Shoes:
+                    CharacterCustomizer.instance.ShowShoes(currSlot.index);
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
             switch (currTab)
             {
                 case CharacterCustomizer.EquipLocation.Backpack:
-                    cc.ShowBack(-1);
+                    CharacterCustomizer.instance.ShowBack(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Belt:
-                    cc.ShowBelt(-1);
+                    CharacterCustomizer.instance.ShowBelt(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Body:
-                    cc.ShowBody(-1);
+                    CharacterCustomizer.instance.ShowBody(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Glasses:
-                    cc.ShowGlasses(-1);
+                    CharacterCustomizer.instance.ShowGlasses(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Hat:
-                    cc.ShowHat(-1);
+                    CharacterCustomizer.instance.ShowHat(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Head:
-                    cc.ShowHead(-1);
+                    CharacterCustomizer.instance.ShowHead(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Mask:
-                    cc.ShowMask(-1);
+                    CharacterCustomizer.instance.ShowMask(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Pants:
-                    cc.ShowPants(-1);
+                    CharacterCustomizer.instance.ShowPants(-1);
                     break;
                 case CharacterCustomizer.EquipLocation.Shoes:
-                    cc.ShowShoes(-1);
+                    CharacterCustomizer.instance.ShowShoes(-1);
                     break;
                 default:
                     break;
             }
         }
-        
+
     }
     public void Equip()
     {
         switch (currSlot.slotLocation)
         {
             case CharacterCustomizer.EquipLocation.Backpack:
-                cc.SetBackpack(currSlot.index);
+                CharacterCustomizer.instance.SetBackpack(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Belt:
-                cc.SetBelt(currSlot.index);
+                CharacterCustomizer.instance.SetBelt(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Body:
-                cc.SetBody(currSlot.index);
+                CharacterCustomizer.instance.SetBody(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Glasses:
-                cc.SetGlasses(currSlot.index);
+                CharacterCustomizer.instance.SetGlasses(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Hat:
-                cc.SetHat(currSlot.index);
+                CharacterCustomizer.instance.SetHat(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Head:
-                cc.SetHead(currSlot.index);
+                CharacterCustomizer.instance.SetHead(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Mask:
-                cc.SetMask(currSlot.index);
+                CharacterCustomizer.instance.SetMask(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Pants:
-                cc.SetPants(currSlot.index);
+                CharacterCustomizer.instance.SetPants(currSlot.index);
                 break;
             case CharacterCustomizer.EquipLocation.Shoes:
-                cc.SetShoes(currSlot.index);
+                CharacterCustomizer.instance.SetShoes(currSlot.index);
                 break;
             default:
                 break;
         }
         SetCCButtons();
-        cc.CheckEquippedIcons();
+        CharacterCustomizer.instance.CheckEquippedIcons();
     }
 
     public void DequipButtons()
@@ -589,47 +604,47 @@ public class CCGui : MonoBehaviour
     }
     public void DeEquip()
     {
-            switch (currTab)
-            {
-                case CharacterCustomizer.EquipLocation.Backpack:
-                    cc.SetBackpack(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Belt:
-                    cc.SetBelt(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Body:
-                    cc.SetBody(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Glasses:
-                    cc.SetGlasses(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Hat:
-                    cc.SetHat(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Head:
-                    cc.SetHead(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Mask:
-                    cc.SetMask(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Pants:
-                    cc.SetPants(-1);
-                    break;
-                case CharacterCustomizer.EquipLocation.Shoes:
-                    cc.SetShoes(-1);
-                    break;
-                default:
-                    break;
-            }
+        switch (currTab)
+        {
+            case CharacterCustomizer.EquipLocation.Backpack:
+                CharacterCustomizer.instance.SetBackpack(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Belt:
+                CharacterCustomizer.instance.SetBelt(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Body:
+                CharacterCustomizer.instance.SetBody(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Glasses:
+                CharacterCustomizer.instance.SetGlasses(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Hat:
+                CharacterCustomizer.instance.SetHat(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Head:
+                CharacterCustomizer.instance.SetHead(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Mask:
+                CharacterCustomizer.instance.SetMask(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Pants:
+                CharacterCustomizer.instance.SetPants(-1);
+                break;
+            case CharacterCustomizer.EquipLocation.Shoes:
+                CharacterCustomizer.instance.SetShoes(-1);
+                break;
+            default:
+                break;
+        }
         SetCCButtons();
-        cc.CheckEquippedIcons();
+        CharacterCustomizer.instance.CheckEquippedIcons();
     }
     public void Buy()
     {
         //TODO: take money
         currSlot.unlocked = true;
         SetCCButtons();
-        cc.ResetGear();
+        CharacterCustomizer.instance.ResetGear();
     }
 
     void Deselect()
@@ -648,43 +663,43 @@ public class CCGui : MonoBehaviour
 
     public void SetGearSlot(int index)
     {
-        cc.ResetGear();
+        CharacterCustomizer.instance.ResetGear();
         if (index >= 0)
         {
             switch (currTab)
             {
                 case CharacterCustomizer.EquipLocation.Backpack:
-                    currSlot = cc.backpacks[index];
+                    currSlot = CharacterCustomizer.instance.backpacks[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Belt:
-                    currSlot = cc.belts[index];
+                    currSlot = CharacterCustomizer.instance.belts[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Body:
-                    currSlot = cc.bodies[index];
+                    currSlot = CharacterCustomizer.instance.bodies[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Glasses:
-                    currSlot = cc.glasses[index];
+                    currSlot = CharacterCustomizer.instance.glasses[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Hat:
-                    currSlot = cc.hats[index];
+                    currSlot = CharacterCustomizer.instance.hats[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Head:
-                    currSlot = cc.heads[index];
+                    currSlot = CharacterCustomizer.instance.heads[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Mask:
-                    currSlot = cc.masks[index];
+                    currSlot = CharacterCustomizer.instance.masks[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Pants:
-                    currSlot = cc.pants[index];
+                    currSlot = CharacterCustomizer.instance.pants[index];
                     break;
                 case CharacterCustomizer.EquipLocation.Shoes:
-                    currSlot = cc.shoes[index];
+                    currSlot = CharacterCustomizer.instance.shoes[index];
                     break;
                 default:
                     break;
             }
         }
-        else if (index==-1)
+        else if (index == -1)
         {
             currSlot = null;
         }
@@ -695,4 +710,50 @@ public class CCGui : MonoBehaviour
     {
         gearButton.GetComponentInChildren<SVGImage>().enabled = enabled;
     }
+
+    public void TurnOffGUI()
+    {
+        m_CanvasGroup.alpha = 0;
+        m_CanvasGroup.interactable = false;
+    }
+
+
+    public void FadeGUI(bool fade)
+    {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+        if (fade && !faded)
+        {
+            m_CanvasGroup.DOFade(0, 1f);
+            m_CanvasGroup.interactable = false;
+
+        }
+        else
+        {
+            m_CanvasGroup.DOFade(1, 1f);
+            m_CanvasGroup.interactable = true;
+        }
+        faded = !faded;
+    }
+
+    public static void FadeCCGUI(bool fade)
+    {
+        instance.FadeGUI(fade);
+    }
+
+    private void OnDisable()
+    {
+        TurnOffGUI();
+    }
+
+    public void BackButton()
+    {
+        ClientFrontend.OnSelectStatic();
+        ClientFrontend.instance.ShowMenu(ClientFrontend.MenuShowing.Main);
+
+    }
+
+    public void OnHighlight() { ClientFrontend.OnHightlightStatic(); }
 }
