@@ -196,11 +196,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400042, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
       propertyPath: skeletonColor.r
-      value: 0
+      value: 0.8293452
       objectReference: {fileID: 0}
     - target: {fileID: 11400042, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
       propertyPath: skeletonColor.g
-      value: 0.27939224
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400042, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
       propertyPath: skeletonColor.b
@@ -577,6 +577,18 @@ PrefabInstance:
     - target: {fileID: 400056, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100246, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100244, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100248, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 13700050, guid: b7538c5d24affed48893bd3a90e153fb, type: 3}
       propertyPath: m_Materials.Array.data[0]

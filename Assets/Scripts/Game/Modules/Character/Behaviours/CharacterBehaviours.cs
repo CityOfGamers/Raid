@@ -21,6 +21,7 @@ public class CharacterBehaviours
         systems.Add(world.GetECSWorld().CreateManager<RocketJump_RequestActive>(world));
         systems.Add(world.GetECSWorld().CreateManager<Dead_RequestActive>(world));
         systems.Add(world.GetECSWorld().CreateManager<AutoRifle_RequestActive>(world));
+        systems.Add(world.GetECSWorld().CreateManager<RaiderRifle_RequestActive>(world));
         systems.Add(world.GetECSWorld().CreateManager<Chaingun_RequestActive>(world));
         systems.Add(world.GetECSWorld().CreateManager<GrenadeLauncher_RequestActive>(world));
         systems.Add(world.GetECSWorld().CreateManager<ProjectileLauncher_RequestActive>(world));
@@ -50,6 +51,7 @@ public class CharacterBehaviours
         systems.Add(world.GetECSWorld().CreateManager<RocketJump_Update>(world));
         systems.Add(world.GetECSWorld().CreateManager<Sprint_Update>(world));
         systems.Add(world.GetECSWorld().CreateManager<AutoRifle_Update>(world));
+        systems.Add(world.GetECSWorld().CreateManager<RaiderRifle_Update>(world));
         systems.Add(world.GetECSWorld().CreateManager<ProjectileLauncher_Update>(world));
         systems.Add(world.GetECSWorld().CreateManager<Chaingun_Update>(world));
         systems.Add(world.GetECSWorld().CreateManager<GrenadeLauncher_Update>(world));
@@ -61,6 +63,7 @@ public class CharacterBehaviours
     public static void CreateAbilityResolveSystems(GameWorld world, SystemCollection systems)
     {
         systems.Add(world.GetECSWorld().CreateManager<AutoRifle_HandleCollisionQuery>(world));
+        systems.Add(world.GetECSWorld().CreateManager<RaiderRifle_HandleCollisionQuery>(world));
         systems.Add(world.GetECSWorld().CreateManager<Melee_HandleCollision>(world));
     }
     

@@ -17,6 +17,9 @@ public class ItemModule
         m_systems.Add(world.GetECSWorld().CreateManager<UpdateTerraformerWeaponA>(world));
         m_systems.Add(world.GetECSWorld().CreateManager<UpdateItemActionTimelineTrigger>(world));
         m_systems.Add(world.GetECSWorld().CreateManager<System_RobotWeaponA>(world));
+
+        m_systems.Add(world.GetECSWorld().CreateManager<RaiderRifleWeaponAClientProjectileSpawnHandler>(world));
+        m_systems.Add(world.GetECSWorld().CreateManager<UpdateRaiderRifleWeaponA>(world));
     }
 
     public void HandleSpawn()
