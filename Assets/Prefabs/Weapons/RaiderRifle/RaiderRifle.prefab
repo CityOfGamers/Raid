@@ -97,7 +97,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165680445858213802}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 500b184aa6dffae46a9fb375c1081d08, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 06266f4a783c4d44c8e9512ed3983012, type: 3}
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
   m_PropertySheet:
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawSkeleton: 0
-  skeletonColor: {r: 0, g: 0.41044283, b: 1, a: 1}
+  skeletonColor: {r: 0, g: 1, b: 0.77938175, a: 1}
   boneSize: 1
   drawTripods: 0
   bones:
@@ -1270,7 +1270,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3328146709482765298}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 7d7f733ddb6efd948866663916f5c5f2, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 2ea351ce0edceb7439f4755f7349140f, type: 3}
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
   m_PropertySheet:
