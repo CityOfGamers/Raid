@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 4176178608380834853}
   - component: {fileID: 6558274553004728493}
   - component: {fileID: 6594979997052468659}
-  - component: {fileID: 6627571449373349718}
+  - component: {fileID: 6294724536380263727}
   m_Layer: 0
   m_Name: RaiderRifle
   m_TagString: Untagged
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawSkeleton: 0
-  skeletonColor: {r: 0, g: 1, b: 0.77938175, a: 1}
+  skeletonColor: {r: 0, g: 1, b: 0.6387553, a: 1}
   boneSize: 1
   drawTripods: 0
   bones:
@@ -536,7 +536,7 @@ MonoBehaviour:
   uiPrefabs: []
   weaponBoneDebug: {fileID: 0}
   weaponOffsetDebug: {x: 0, y: 0, z: 0}
---- !u!114 &6627571449373349718
+--- !u!114 &6294724536380263727
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -555,24 +555,18 @@ MonoBehaviour:
   vents: []
   ventDampSpeed: 5
   ventStartSpeed: 1000
-  primaryFireSound: {fileID: 11400000, guid: e8d780ba78fc3ca488cb5e097a3f3877, type: 2}
+  primaryFireSound: {fileID: 11400000, guid: f27d8fef183bdfd4fb6fdc236ba643e7, type: 2}
   primaryMuzzleFlash: {fileID: 8008192266096439069}
   hitscanEffect: {fileID: 11400000, guid: 0535d66d5ba94b442bb4a6824f0dcfd0, type: 2}
   environmentImpactEffect: {fileID: 11400000, guid: 7942eed226c6d424596134d04568620f,
     type: 2}
   characterImpactEffect: {fileID: 11400000, guid: 7942eed226c6d424596134d04568620f,
     type: 2}
-  secondaryFireSound: {fileID: 11400000, guid: 1feb0cc68fe3e354093ff3e6b739802f, type: 2}
+  secondaryFireSound: {fileID: 11400000, guid: a44a12e15203dae4c93fc1c581cde5c7, type: 2}
   secondaryMuzzleFlash: {fileID: 5371503038428922182}
   meleeImpactSound: {fileID: 11400000, guid: c403338d33b3ddb44bf7341d05e7d607, type: 2}
   meleeImpactEffect: {fileID: 0}
-  ventRotationSpeed:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  ventRotationSpeed: []
   nextVentIndex: 0
   m_lastGrenadeFuelWorldPos: {x: 0, y: 0, z: 0}
   m_prevAction: 0
